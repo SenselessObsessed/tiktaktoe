@@ -1,42 +1,71 @@
 let players = ['x', 'o'];
 let activePlayer = 0;
-let board = [];
+let board = [
+  ['', '', '', ''],
+  ['', '', '', ''],
+  ['', '', '', ''],
+  ['', '', '', ''],
+];
+
 function startGame() {
   board = [
-    ['', '', ''],
-    ['', '', ''],
-    ['', '', '']
+    ['', '', '', ''],
+    ['', '', '', ''],
+    ['', '', '', ''],
+    ['', '', '', ''],
   ];
   activePlayer = 0;
   renderBoard(board);
 }
 
-function click(numStr, numStr2) {
-  let num = Number(numStr);
-  let num2 = Number(numStr2);
-  board[num][num2] = players[activePlayer];
+function click(str, col) {
+  board[str][col] = players[activePlayer];
   renderBoard(board);
-  if (checkWinner(board, players[activePlayer])) {
+  const result = checkWinner(board);
+  if (result) {
     showWinner(activePlayer);
+  } else {
+    if (activePlayer === 0) {
+      activePlayer = 1;
+    } else {
+      activePlayer = 0;
+    }
   }
-  activePlayer = (activePlayer + 1) % 2;
 }
 
-function checkWinner(board, players) {
-  let winner = false;
-  for (let i = 0; i < board.length; i++) {
-    if (board[i][0] === players && board[i][1] === players && board[i][2] === players) {
-      winner = true;
+function checkWinner(board) {
+  const boardSize = board.length;
+  for (let i = 0, counter = 0; i < boardSize; i++) {
+    if (board[i][i] === players[activePlayer]) {
+      counter += 1;
     }
-    if (board[0][i] === players && board[1][i] === players && board[2][i] === players) {
-      winner = true;
+    if (counter === boardSize) return true;
+  }
+
+  for (let i = 0, j = boardSize - 1, counter = 0; i < boardSize; i++, j--) {
+    if (board[i][j] === players[activePlayer]) {
+      counter += 1;
+    }
+    if (counter === boardSize) return true;
+  }
+
+  for (let i = 0; i < boardSize; i++) {
+    for (let j = 0, counter = 0; j < boardSize; j++) {
+      if (board[i][j] === players[activePlayer]) {
+        counter += 1;
+      }
+      if (counter === boardSize) return true;
     }
   }
-  if (board[0][0] === players && board[1][1] === players && board[2][2] === players) {
-    winner = true;
+
+  for (let i = 0; i < boardSize; i++) {
+    for (let j = 0, counter = 0; j < boardSize; j++) {
+      if (board[j][i] === players[activePlayer]) {
+        counter += 1;
+      }
+      if (counter === boardSize) return true;
+    }
   }
-  if (board[0][2] === players && board[1][1] === players && board[2][0] === players) {
-    winner = true;
-  }
-  return winner
+
+  return false;
 }
