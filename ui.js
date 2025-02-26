@@ -17,7 +17,7 @@ boardEl.addEventListener('click', function (event) {
   let targetClasses = event.target.classList;
   let targetData = event.target.dataset;
   if (targetClasses.contains('field') && !targetClasses.contains('busy')) {
-    click(targetData.row, targetData.col);
+    click(Number(targetData.row), Number(targetData.col));
   }
 });
 
